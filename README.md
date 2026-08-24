@@ -23,3 +23,7 @@ Currently in development.
 ## How It Works
 
 Users can enter a suspicious message into Scam Lens. The application analyzes the message for potential scam indicators and provides an explanation of the identified risk.
+
+## Project Goal
+
+Scam Lens aims to help users recognize potentially fraudulent messages by explaining suspicious patterns in a simple and understandable way.
