@@ -80,7 +80,7 @@ body {
 }
 
 /* =========================
-   RISK PULSE
+   RISK AMBIENT TONE (static, not blinking)
 ========================= */
 
 .risk-pulse {
@@ -89,48 +89,34 @@ body {
   pointer-events: none;
   z-index: 0;
   opacity: 0;
+  transition: opacity .6s ease;
 }
 
 .risk-pulse.high {
-  animation: highPulse 1s ease-in-out infinite;
+  opacity: .5;
   background: radial-gradient(
     ellipse 800px 600px at 50% 25%,
-    rgba(255, 40, 70, .20),
+    rgba(255, 40, 70, .16),
     transparent 65%
   );
 }
 
 .risk-pulse.medium {
-  animation: mediumPulse 1.5s ease-in-out infinite;
+  opacity: .5;
   background: radial-gradient(
     ellipse 800px 600px at 50% 25%,
-    rgba(240, 169, 71, .17),
+    rgba(240, 169, 71, .14),
     transparent 65%
   );
 }
 
 .risk-pulse.low {
-  animation: lowPulse 2s ease-in-out infinite;
+  opacity: .5;
   background: radial-gradient(
     ellipse 800px 600px at 50% 25%,
-    rgba(63, 216, 176, .14),
+    rgba(63, 216, 176, .12),
     transparent 65%
   );
-}
-
-@keyframes highPulse {
-  0%,100% { opacity: .15; }
-  50% { opacity: .9; }
-}
-
-@keyframes mediumPulse {
-  0%,100% { opacity: .1; }
-  50% { opacity: .7; }
-}
-
-@keyframes lowPulse {
-  0%,100% { opacity: .06; }
-  50% { opacity: .45; }
 }
 
 /* =========================
@@ -580,7 +566,7 @@ body {
 }
 
 /* =========================
-   ANALYSIS HIGHLIGHT
+   ANALYSIS FIELD (scanning view — static, no blinking marks)
 ========================= */
 
 .hl-field {
@@ -644,25 +630,9 @@ body {
 }
 
 .hl-mark.revealed {
-  background: var(--mark-color);
-  color: #05070C;
-
-  animation:
-    warningBlink .75s ease-in-out infinite;
-
-  box-shadow:
-    0 0 10px var(--mark-color),
-    0 0 22px var(--mark-color);
-}
-
-@keyframes warningBlink {
-  0%,100% {
-    opacity: .45;
-  }
-
-  50% {
-    opacity: 1;
-  }
+  background: color-mix(in srgb, var(--mark-color) 30%, transparent);
+  color: #F4F6FB;
+  box-shadow: inset 0 0 0 1px var(--mark-color);
 }
 
 /* =========================
@@ -873,54 +843,6 @@ body {
   position: relative;
 }
 
-.verdict-header.high {
-  animation: resultRed 1s ease-in-out infinite;
-}
-
-.verdict-header.medium {
-  animation: resultYellow 1.4s ease-in-out infinite;
-}
-
-.verdict-header.low {
-  animation: resultGreen 2s ease-in-out infinite;
-}
-
-@keyframes resultRed {
-  0%,100% {
-    box-shadow: 0 0 5px rgba(255,77,106,.15);
-  }
-
-  50% {
-    box-shadow:
-      0 0 25px rgba(255,77,106,.65),
-      inset 0 0 20px rgba(255,77,106,.08);
-  }
-}
-
-@keyframes resultYellow {
-  0%,100% {
-    box-shadow: 0 0 5px rgba(240,169,71,.12);
-  }
-
-  50% {
-    box-shadow:
-      0 0 24px rgba(240,169,71,.55),
-      inset 0 0 18px rgba(240,169,71,.06);
-  }
-}
-
-@keyframes resultGreen {
-  0%,100% {
-    box-shadow: 0 0 5px rgba(63,216,176,.10);
-  }
-
-  50% {
-    box-shadow:
-      0 0 20px rgba(63,216,176,.42),
-      inset 0 0 15px rgba(63,216,176,.05);
-  }
-}
-
 .verdict-icon {
   width: 45px;
   height: 45px;
@@ -1122,6 +1044,200 @@ body {
 }
 
 /* =========================
+   COLLAPSIBLE SECTIONS
+========================= */
+
+.collapsible {
+  background: #0E1524;
+  border: 1px solid #1C2740;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-top: 14px;
+}
+
+.collapsible-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 15px 18px;
+
+  cursor: pointer;
+  user-select: none;
+}
+
+.collapsible-head-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.collapsible-chevron {
+  color: #8A93AC;
+  font-size: 12px;
+  transition: transform .2s;
+  flex-shrink: 0;
+}
+
+.collapsible.open .collapsible-chevron {
+  transform: rotate(180deg);
+}
+
+.collapsible-body {
+  display: none;
+  padding: 0 18px 18px;
+}
+
+.collapsible.open .collapsible-body {
+  display: block;
+}
+
+/* Flag detail card (matches the "Detected Warning Signs" layout) */
+
+.flag-card {
+  background: #150C10;
+  border: 1px solid rgba(255,77,106,.28);
+  border-radius: 12px;
+
+  padding: 14px 16px;
+  margin-bottom: 10px;
+
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.flag-card:last-child {
+  margin-bottom: 0;
+}
+
+.flag-card-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.flag-card-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  font-weight: 700;
+  font-size: 14px;
+  color: white;
+
+  margin-bottom: 6px;
+}
+
+.flag-card-quote {
+  font-family: 'Manrope', monospace;
+  font-size: 12.5px;
+  color: #FF9CAE;
+
+  margin-bottom: 6px;
+  line-height: 1.5;
+
+  word-break: break-word;
+}
+
+.flag-card-desc {
+  font-size: 12.5px;
+  color: #8A93AC;
+  line-height: 1.5;
+}
+
+.flag-card-sev {
+  flex-shrink: 0;
+  align-self: flex-start;
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+
+  padding: 4px 9px;
+  border-radius: 999px;
+
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.sev-High {
+  color: #FF6B87;
+  border-color: rgba(255,107,135,.5);
+  background: rgba(255,77,106,.12);
+}
+
+.sev-Medium {
+  color: #F0A947;
+  border-color: rgba(240,169,71,.5);
+  background: rgba(240,169,71,.12);
+}
+
+.sev-Low {
+  color: #3FD8B0;
+  border-color: rgba(63,216,176,.5);
+  background: rgba(63,216,176,.12);
+}
+
+.check-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.check-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+
+  font-size: 13px;
+  color: #D7DCEA;
+  line-height: 1.5;
+}
+
+.check-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.original-message-box {
+  background: #070A12;
+  border: 1px solid #1C2740;
+  border-radius: 10px;
+
+  padding: 14px;
+
+  font-size: 13px;
+  line-height: 1.6;
+  color: #C6CCDE;
+
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.result-disclaimer {
+  margin-top: 18px;
+
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: #566082;
+
+  border-top: 1px solid #161F35;
+  padding-top: 14px;
+}
+
+.result-disclaimer strong {
+  color: #8A93AC;
+}
+
+/* =========================
    EMPTY
 ========================= */
 
@@ -1195,6 +1311,100 @@ body {
   font-size: 13px;
   line-height: 1.6;
   margin: 0;
+}
+
+/* =========================
+   HOW IT WORKS
+========================= */
+
+.how-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 34px;
+}
+
+.how-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+
+  background: #0E1524;
+  border: 1px solid #1C2740;
+  border-radius: 14px;
+
+  padding: 18px 20px;
+}
+
+.how-step-num {
+  flex-shrink: 0;
+
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+
+  background: linear-gradient(135deg, #5BA0FF, #2F6FFF);
+  color: #05070C;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.how-step-title {
+  font-weight: 700;
+  font-size: 14.5px;
+  margin-bottom: 4px;
+}
+
+.how-step-desc {
+  color: #8A93AC;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.how-look-title {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.how-look-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.how-look-card {
+  background: #0E1524;
+  border: 1px solid #1C2740;
+  border-radius: 14px;
+
+  padding: 18px 20px;
+
+  display: flex;
+  gap: 12px;
+}
+
+.how-look-icon {
+  flex-shrink: 0;
+  font-size: 18px;
+  color: #5BA0FF;
+}
+
+.how-look-name {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.how-look-desc {
+  color: #8A93AC;
+  font-size: 12.5px;
+  line-height: 1.55;
 }
 
 /* =========================
@@ -1317,6 +1527,10 @@ body {
   .sticky {
     position: static;
   }
+
+  .how-look-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media(max-width:700px) {
@@ -1365,6 +1579,10 @@ body {
 
   .hist-item {
     flex-wrap: wrap;
+  }
+
+  .flag-card {
+    flex-direction: column;
   }
 }
 </style>
@@ -1474,6 +1692,11 @@ body {
   <div class="sl-nav-item" data-section="history">
     🕘
     <span>History</span>
+  </div>
+
+  <div class="sl-nav-item" data-section="howitworks">
+    📖
+    <span>How It Works</span>
   </div>
 
   <div class="sl-nav-item" data-section="about">
@@ -1648,7 +1871,7 @@ body {
 
 <div class="source-select">
 
-<button class="source-btn" id="sourceButton">
+<button class="source-btn" id="sourceButton" type="button">
 
 <span id="sourceText" class="placeholder">
 Select an option (optional)
@@ -1683,11 +1906,11 @@ placeholder="Paste the text message, email body, or DM you received…"
 
 <div class="sl-actions">
 
-<button class="sl-btn" id="analyzeBtn">
+<button class="sl-btn" id="analyzeBtn" type="button">
   🔍 Investigate
 </button>
 
-<button class="sl-btn-ghost" id="clearBtn">
+<button class="sl-btn-ghost" id="clearBtn" type="button">
   Clear
 </button>
 
@@ -1841,6 +2064,103 @@ A quiet log of everything you've investigated this session.
 
 <div class="hist-empty">
 No investigations yet — run a scan and it will appear here.
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= HOW IT WORKS ================= -->
+
+<section id="howitworksSection" style="display:none;">
+
+<div class="sl-hero">
+
+<div class="sl-wordmark">
+How It Works
+</div>
+
+<h1 class="sl-title">
+From <em>paste</em> to <em>verdict</em>.
+</h1>
+
+<p class="sl-sub">
+Four steps take you from an uneasy feeling to a clear,
+evidence-based read on whatever landed in your inbox.
+</p>
+
+</div>
+
+<div class="how-steps">
+
+<div class="how-step">
+<div class="how-step-num">1</div>
+<div>
+<div class="how-step-title">Paste what you received</div>
+<div class="how-step-desc">Drop in a message, link, phone number, email sender, or profile — exactly as you received it.</div>
+</div>
+</div>
+
+<div class="how-step">
+<div class="how-step-num">2</div>
+<div>
+<div class="how-step-title">ScamLens scans for patterns</div>
+<div class="how-step-desc">The text is checked against known scam tactics: urgency language, credential requests, payment demands, suspicious links, and lookalike domains.</div>
+</div>
+</div>
+
+<div class="how-step">
+<div class="how-step-num">3</div>
+<div>
+<div class="how-step-title">Structured assessment</div>
+<div class="how-step-desc">ScamLens returns a structured evaluation: risk level, warning signs, suspicious links, and recommended actions.</div>
+</div>
+</div>
+
+<div class="how-step">
+<div class="how-step-num">4</div>
+<div>
+<div class="how-step-title">You make an informed decision</div>
+<div class="how-step-desc">You see exactly which parts of the message appear suspicious and why, helping you decide whether to trust it.</div>
+</div>
+</div>
+
+</div>
+
+<div class="how-look-title">What We Look For</div>
+
+<div class="how-look-grid">
+
+<div class="how-look-card">
+<div class="how-look-icon">⚠️</div>
+<div>
+<div class="how-look-name">Urgency & Pressure</div>
+<div class="how-look-desc">Legitimate companies rarely force you to act immediately via unsolicited messages.</div>
+</div>
+</div>
+
+<div class="how-look-card">
+<div class="how-look-icon">🛡️</div>
+<div>
+<div class="how-look-name">Impersonation</div>
+<div class="how-look-desc">Scammers pretend to be banks, government agencies, or trusted companies.</div>
+</div>
+</div>
+
+<div class="how-look-card">
+<div class="how-look-icon">🔑</div>
+<div>
+<div class="how-look-name">Credential Requests</div>
+<div class="how-look-desc">No legitimate service asks for passwords, OTPs, or PINs via message.</div>
+</div>
+</div>
+
+<div class="how-look-card">
+<div class="how-look-icon">💳</div>
+<div>
+<div class="how-look-name">Payment Scams</div>
+<div class="how-look-desc">Advance fees, unusual payment methods, or rewards that seem too good to be true.</div>
+</div>
 </div>
 
 </div>
@@ -2045,6 +2365,8 @@ const patterns = [
 {
 name:"Urgency / time pressure",
 color:"#F0A947",
+severity:"High",
+description:"Scammers create artificial urgency to bypass your critical thinking.",
 words:[
 "urgent",
 "immediately",
@@ -2062,6 +2384,8 @@ weight:18
 {
 name:"Credential / verification request",
 color:"#FF4D6A",
+severity:"High",
+description:"Legitimate companies never ask for passwords or verification codes via message.",
 words:[
 "verify your identity",
 "confirm your password",
@@ -2081,6 +2405,8 @@ weight:22
 {
 name:"Payment / money request",
 color:"#FF4D6A",
+severity:"High",
+description:"Requests for wire transfers, gift cards, or crypto are a major red flag.",
 words:[
 "wire transfer",
 "gift card",
@@ -2100,6 +2426,8 @@ weight:24
 {
 name:"Suspicious link",
 color:"#5BA0FF",
+severity:"Medium",
+description:"Links could redirect to fake websites designed to steal information.",
 words:[
 "http://",
 ".tk/",
@@ -2116,6 +2444,8 @@ weight:16
 {
 name:"Lookalike domain",
 color:"#FF6B87",
+severity:"High",
+description:"The domain swaps characters to imitate a trusted brand.",
 words:[
 "paypa1",
 "amaz0n",
@@ -2153,6 +2483,7 @@ const examples = document.getElementById("examples");
 let activeTab = "message";
 let source = "";
 let history = [];
+let lastAnalyzedText = "";
 
 
 /* =====================================================
@@ -2175,6 +2506,7 @@ sourceText.textContent = "Select an option (optional)";
 sourceText.className = "placeholder";
 
 sourceMenu.innerHTML = "";
+sourceMenu.style.display = "none";
 
 tab.sources.forEach(item => {
 
@@ -2183,7 +2515,9 @@ const option = document.createElement("div");
 option.className = "source-option";
 option.textContent = item;
 
-option.onclick = () => {
+option.onclick = (e) => {
+
+e.stopPropagation();
 
 source = item;
 
@@ -2205,6 +2539,7 @@ tab.examples.forEach(ex => {
 
 const button = document.createElement("button");
 
+button.type = "button";
 button.className = "example-chip";
 
 button.textContent = ex[0];
@@ -2231,7 +2566,9 @@ examples.appendChild(button);
    SOURCE DROPDOWN
 ===================================================== */
 
-sourceButton.onclick = () => {
+sourceButton.onclick = (e) => {
+
+e.stopPropagation();
 
 sourceMenu.style.display =
 sourceMenu.style.display === "none"
@@ -2239,6 +2576,21 @@ sourceMenu.style.display === "none"
 : "none";
 
 };
+
+document.addEventListener("click", (e) => {
+
+if(
+sourceMenu.style.display !== "none" &&
+!sourceMenu.contains(e.target) &&
+e.target !== sourceButton &&
+!sourceButton.contains(e.target)
+){
+
+sourceMenu.style.display = "none";
+
+}
+
+});
 
 
 /* =====================================================
@@ -2262,19 +2614,38 @@ let score = 8;
 
 let flags = [];
 
+const lower = text.toLowerCase();
+
 patterns.forEach(pattern => {
 
-const found = pattern.words.some(word =>
-text.toLowerCase().includes(word)
-);
+let matchedWord = null;
 
-if(found) {
+for(const word of pattern.words){
+
+if(lower.includes(word)){
+
+matchedWord = word;
+
+break;
+
+}
+
+}
+
+if(matchedWord){
 
 score += pattern.weight;
 
+const idx = lower.indexOf(matchedWord);
+
+const quote = text.substring(idx, idx + matchedWord.length);
+
 flags.push({
 name:pattern.name,
-color:pattern.color
+color:pattern.color,
+severity:pattern.severity,
+description:pattern.description,
+quote:quote
 });
 
 }
@@ -2292,8 +2663,11 @@ activeTab === "website" &&
 score += 15;
 
 flags.push({
-name:"Uses a raw IP address instead of a normal domain",
-color:"#FF4D6A"
+name:"Raw IP address",
+color:"#FF4D6A",
+severity:"Medium",
+description:"Uses a raw IP address instead of a normal domain name.",
+quote: text.match(/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/)[0]
 });
 
 }
@@ -2408,7 +2782,7 @@ tips
 
 
 /* =====================================================
-   HIGHLIGHT TEXT
+   HIGHLIGHT TEXT (scanning view — static markers, no blink)
 ===================================================== */
 
 function createHighlightHTML(text, step) {
@@ -2600,10 +2974,25 @@ return interval;
 
 
 /* =====================================================
+   COLLAPSIBLE TOGGLE
+===================================================== */
+
+function toggleCollapsible(id){
+
+const el = document.getElementById(id);
+
+if(!el) return;
+
+el.classList.toggle("open");
+
+}
+
+
+/* =====================================================
    SHOW RESULT
 ===================================================== */
 
-function showResult(result){
+function showResult(result, originalText){
 
 scanScreen.style.display = "none";
 
@@ -2640,7 +3029,7 @@ low:"✓"
 resultScreen.innerHTML = `
 
 <div
-class="verdict-header ${result.verdict}"
+class="verdict-header"
 style="
 background:${color}12;
 border-color:${color}66;
@@ -2806,35 +3195,34 @@ result.flags.length
 ?
 
 `
+<div class="collapsible open" id="collapseFlags">
 
-<div class="sl-section">
-
-<div class="sl-section-title">
-
-🚩 Red Flags Detected (${result.flags.length})
-
+<div class="collapsible-head" onclick="toggleCollapsible('collapseFlags')">
+<div class="collapsible-head-title">🚩 Detected Warning Signs (${result.flags.length})</div>
+<div class="collapsible-chevron">▾</div>
 </div>
 
-<ul class="result-list">
+<div class="collapsible-body">
 
 ${result.flags.map(flag=>`
 
-<li class="flag">
+<div class="flag-card">
 
-<span style="color:${flag.color}">
-●
-</span>
+<div class="flag-card-main">
+<div class="flag-card-title">${flag.name}</div>
+${flag.quote ? `<div class="flag-card-quote">"${escapeHTML(flag.quote)}"</div>` : ""}
+<div class="flag-card-desc">${flag.description}</div>
+</div>
 
-${flag.name}
-
-</li>
-
-`).join("")}
-
-</ul>
+<div class="flag-card-sev sev-${flag.severity}">${flag.severity}</div>
 
 </div>
 
+`).join("")}
+
+</div>
+
+</div>
 `
 
 :""
@@ -2850,24 +3238,59 @@ ${flag.name}
 
 </div>
 
-<ul class="result-list">
+<ul class="check-list">
 
 ${result.tips.map(tip=>`
 
-<li class="tip">
-
-<span style="color:#5BA0FF">
-●
-</span>
-
+<li>
+<span class="check-icon" style="color:#5BA0FF">✓</span>
 ${tip}
-
 </li>
 
 `).join("")}
 
 </ul>
 
+</div>
+
+
+<div class="collapsible" id="collapseVerify">
+
+<div class="collapsible-head" onclick="toggleCollapsible('collapseVerify')">
+<div class="collapsible-head-title">❔ What We Cannot Verify</div>
+<div class="collapsible-chevron">▾</div>
+</div>
+
+<div class="collapsible-body">
+<p style="color:#8A93AC;font-size:12.5px;line-height:1.6;margin:0;">
+Demo mode — this analysis is simulated using keyword-based pattern
+detection. It does not check live links, sender authentication
+records, or account history, and cannot confirm intent with certainty.
+</p>
+</div>
+
+</div>
+
+
+<div class="collapsible" id="collapseOriginal">
+
+<div class="collapsible-head" onclick="toggleCollapsible('collapseOriginal')">
+<div class="collapsible-head-title">📄 Original Message</div>
+<div class="collapsible-chevron">▾</div>
+</div>
+
+<div class="collapsible-body">
+<div class="original-message-box">${escapeHTML(originalText)}</div>
+</div>
+
+</div>
+
+
+<div class="result-disclaimer">
+<strong>Disclaimer:</strong> ScamLens provides an AI-assisted risk
+assessment, not a definitive security verdict. Never share passwords,
+OTPs, recovery codes, or financial credentials based solely on this
+analysis.
 </div>
 
 `;
@@ -3049,6 +3472,8 @@ return;
 
 }
 
+lastAnalyzedText = text;
+
 analyzeBtn.disabled = true;
 
 analyzeBtn.innerHTML =
@@ -3060,7 +3485,7 @@ setTimeout(()=>{
 
 const result = analyzeText(text);
 
-showResult(result);
+showResult(result, text);
 
 addHistory(result);
 
@@ -3091,6 +3516,10 @@ emptyResult.style.display = "block";
 
 document.getElementById("riskPulse").className = "risk-pulse";
 
+const dot = document.getElementById("statusDot");
+dot.style.background = "#3FD8B0";
+dot.style.boxShadow = "0 0 12px #3FD8B0";
+
 };
 
 
@@ -3103,6 +3532,7 @@ const sections = {
 scanner:"scannerSection",
 library:"librarySection",
 history:"historySection",
+howitworks:"howitworksSection",
 about:"aboutSection"
 
 };
@@ -3112,6 +3542,8 @@ document.querySelectorAll(".sl-nav-item").forEach(item=>{
 item.onclick = () => {
 
 const section = item.dataset.section;
+
+if(!sections[section]) return;
 
 document.querySelectorAll(".sl-nav-item")
 .forEach(x=>x.classList.remove("active"));
@@ -3163,6 +3595,8 @@ resultScreen.style.display = "none";
 scanScreen.style.display = "none";
 
 emptyResult.style.display = "block";
+
+sourceMenu.style.display = "none";
 
 setupTab();
 
