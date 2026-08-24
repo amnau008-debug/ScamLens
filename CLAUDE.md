@@ -36,3 +36,6 @@ Examples:
 - fix: improve scam detection
 - docs: update README
 - chore: update configuration
+## Development Principle
+
+Prioritize clarity, usability, and responsible communication when presenting scam-risk results to users.
