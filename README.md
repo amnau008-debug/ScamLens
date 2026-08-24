@@ -16,13 +16,6 @@ Scam Lens is an AI-powered application designed to help users identify potential
 - CSS
 - Java Script
 
-- ## How It Works
-
-Users can enter a suspicious message into Scam Lens. The application analyzes the message for potential scam indicators and provides an explanation of the identified risk.
-- CSS
-- JavaScript
-- AI
-
-## Project Status
+oject Status
 
 Currently in development.
